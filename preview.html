@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Post Processing Workshop</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#111;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    display:flex;
+    gap:40px;
+}
+
+.controls{
+    width:250px;
+}
+
+canvas{
+    border:2px solid white;
+}
+
+button{
+    margin:4px;
+    padding:6px 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<canvas id="canvas" width="400" height="300"></canvas>
+
+<div class="controls">
+
+<h3>Post Processing</h3>
+
+<label>Brightness</label>
+<input type="range" id="brightness" min="0" max="2" step="0.01" value="1">
+
+<br><br>
+
+<label>Contrast</label>
+<input type="range" id="contrast" min="0" max="2" step="0.01" value="1">
+
+<br><br>
+
+<label>Saturation</label>
+<input type="range" id="saturation" min="0" max="2" step="0.01" value="1">
+
+<br><br>
+
+<label>
+<input type="checkbox" id="vignette">
+Vignette
+</label>
+
+<br><br>
+
+<h3>Time Travel Presets</h3>
+
+<button onclick="setPast()">Past</button>
+<button onclick="setPresent()">Present</button>
+<button onclick="setFuture()">Future</button>
+
+</div>
+
+</div>
+
+<script>
+
+const canvas = document.getElementById("canvas")
+const ctx = canvas.getContext("2d")
+
+const brightness = document.getElementById("brightness")
+const contrast = document.getElementById("contrast")
+const saturation = document.getElementById("saturation")
+const vignette = document.getElementById("vignette")
+
+const img = new Image()
+img.src = "https://picsum.photos/400/300"
+
+img.onload = draw
+
+brightness.oninput = draw
+contrast.oninput = draw
+saturation.oninput = draw
+vignette.onchange = draw
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+ctx.filter = `
+brightness(${brightness.value})
+contrast(${contrast.value})
+saturate(${saturation.value})
+`
+
+ctx.drawImage(img,0,0,canvas.width,canvas.height)
+
+if(vignette.checked){
+
+let gradient = ctx.createRadialGradient(
+200,150,50,
+200,150,200
+)
+
+gradient.addColorStop(0,"rgba(0,0,0,0)")
+gradient.addColorStop(1,"rgba(0,0,0,0.6)")
+
+ctx.fillStyle = gradient
+ctx.fillRect(0,0,400,300)
+
+}
+
+}
+
+function setPast(){
+
+brightness.value = 1.1
+contrast.value = 0.9
+saturation.value = 0.6
+vignette.checked = true
+
+draw()
+
+}
+
+function setPresent(){
+
+brightness.value = 1
+contrast.value = 1
+saturation.value = 1
+vignette.checked = false
+
+draw()
+
+}
+
+function setFuture(){
+
+brightness.value = 1.2
+contrast.value = 1.4
+saturation.value = 1.5
+vignette.checked = false
+
+draw()
+
+}
+
+</script>
+
+</body>
+</html>
