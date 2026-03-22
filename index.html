@@ -84,8 +84,9 @@ const saturation = document.getElementById("saturation")
 const vignette = document.getElementById("vignette")
 
 const img = new Image()
-imageLoader.addEventListener("change", handleImage, false)
 img.src = "https://picsum.photos/400/300"
+imageLoader.addEventListener("change", handleImage, false)
+
 
 img.onload = draw
 
