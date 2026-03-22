@@ -67,6 +67,7 @@ Vignette
 
 <br><br>
 
+<input type="file" id="ImageInput" accept="image/*">
 
 </div>
 
@@ -76,13 +77,14 @@ Vignette
 
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
-
+const imageLoader = document.getElementByID("ImageInput")
 const brightness = document.getElementById("brightness")
 const contrast = document.getElementById("contrast")
 const saturation = document.getElementById("saturation")
 const vignette = document.getElementById("vignette")
 
 const img = new Image()
+imageLoader.addEventListener("change", handleImage, false)
 img.src = "https://picsum.photos/400/300"
 
 img.onload = draw
@@ -91,6 +93,19 @@ brightness.oninput = draw
 contrast.oninput = draw
 saturation.oninput = draw
 vignette.onchange = draw
+
+function handleImage(e) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        img.onload = draw()
+        img.src = event.target.result;
+    }
+    
+    if (e.target.files && e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+    }
+}
 
 function draw(){
 
