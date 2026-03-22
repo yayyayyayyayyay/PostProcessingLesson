@@ -67,11 +67,6 @@ Vignette
 
 <br><br>
 
-<h3>Time Travel Presets</h3>
-
-<button onclick="setPast()">Past</button>
-<button onclick="setPresent()">Present</button>
-<button onclick="setFuture()">Future</button>
 
 </div>
 
@@ -125,35 +120,6 @@ ctx.fillRect(0,0,400,300)
 }
 
 }
-
-function setPast(){
-
-brightness.value = 1.1
-contrast.value = 0.9
-saturation.value = 0.6
-vignette.checked = true
-
-draw()
-
-}
-
-function setPresent(){
-
-brightness.value = 1
-contrast.value = 1
-saturation.value = 1
-vignette.checked = false
-
-draw()
-
-}
-
-function setFuture(){
-
-brightness.value = 1.2
-contrast.value = 1.4
-saturation.value = 1.5
-vignette.checked = false
 
 draw()
 
