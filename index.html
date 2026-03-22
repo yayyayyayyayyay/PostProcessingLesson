@@ -105,6 +105,7 @@ function handleImage(e) {
     if (e.target.files && e.target.files[0]) {
         reader.readAsDataURL(e.target.files[0]);
     }
+    draw()
 }
 
 function draw(){
