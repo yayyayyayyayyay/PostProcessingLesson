@@ -99,7 +99,7 @@ function handleImage(e) {
     const reader = new FileReader();
 
     reader.onload = function(event) {
-        img.onload = draw()
+        img.onload = draw
         img.src = event.target.result;
     }
     
@@ -109,32 +109,61 @@ function handleImage(e) {
     draw()
 }
 
+
 function draw(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height)
-
-ctx.filter = `
-brightness(${brightness.value})
-contrast(${contrast.value})
-saturate(${saturation.value})
-`
-
 ctx.drawImage(img,0,0,canvas.width,canvas.height)
 
-if(vignette.checked){
+let imageData = ctx.getImageData(0,0,canvas.width,canvas.height)
+let data = imageData.data
 
-let gradient = ctx.createRadialGradient(
-200,150,50,
-200,150,200
-)
+for(let i = 0; i < data.length; i += 4){
 
-gradient.addColorStop(0,"rgba(0,0,0,0)")
-gradient.addColorStop(1,"rgba(0,0,0,0.6)")
+    let r = data[i]
+    let g = data[i+1]
+    let b = data[i+2]
 
-ctx.fillStyle = gradient
-ctx.fillRect(0,0,400,300)
+    // TODO: Brightness
 
+    // TODO: Contrast
+
+    // TODO: Saturation
+
+    data[i] = r
+    data[i+1] = g
+    data[i+2] = b
 }
+
+ctx.putImageData(imageData,0,0)
+}
+
+// function draw(){
+
+// ctx.clearRect(0,0,canvas.width,canvas.height)
+
+// ctx.filter = `
+// brightness(${brightness.value})
+// contrast(${contrast.value})
+// saturate(${saturation.value})
+// `
+
+// ctx.drawImage(img,0,0,canvas.width,canvas.height)
+
+// if(vignette.checked){
+
+// let gradient = ctx.createRadialGradient(
+// 200,150,50,
+// 200,150,200
+// )
+
+// gradient.addColorStop(0,"rgba(0,0,0,0)")
+// gradient.addColorStop(1,"rgba(0,0,0,0.6)")
+
+// ctx.fillStyle = gradient
+// ctx.fillRect(0,0,400,300)
+
+// }
 
 }
 
