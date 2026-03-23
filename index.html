@@ -60,6 +60,11 @@ button{
 
 <br><br>
 
+<label>Blur</label>
+<input type="range" id="blur" min="0" max="5" step="1" value="0">
+
+<br><br>
+
 <label>
 <input type="checkbox" id="vignette">
 Vignette
@@ -81,6 +86,7 @@ const imageLoader = document.getElementById("ImageInput")
 const brightness = document.getElementById("brightness")
 const contrast = document.getElementById("contrast")
 const saturation = document.getElementById("saturation")
+const blur = document.getElementById("blur")
 const vignette = document.getElementById("vignette")
 
 const img = new Image()
@@ -93,6 +99,7 @@ img.onload = draw
 brightness.oninput = draw
 contrast.oninput = draw
 saturation.oninput = draw
+blur.oninput = draw
 vignette.onchange = draw
 
 function handleImage(e) {
@@ -117,6 +124,42 @@ ctx.drawImage(img,0,0,canvas.width,canvas.height)
 
 let imageData = ctx.getImageData(0,0,canvas.width,canvas.height)
 let data = imageData.data
+
+let copy = new Uint8ClampedArray(data)
+
+let radius = parseInt(blur.value)
+
+for(let y = 0; y < canvas.height; y++){
+    for(let x = 0; x < canvas.width; x++){
+
+        let totalR = 0
+        let totalG = 0
+        let totalB = 0
+        let count = 0
+
+        for(let dy = -radius; dy <= radius; dy++){
+            for(let dx = -radius; dx <= radius; dx++){
+
+                let nx = x + dx
+                let ny = y + dy
+
+                if(nx >= 0 && nx < canvas.width && ny >= 0 && ny < canvas.height){
+
+                    let i = (ny * canvas.width + nx) * 4
+
+                    totalR += copy[i]
+                    totalG += copy[i+1]
+                    totalB += copy[i+2]
+                    count++
+                }
+            }
+        }
+
+        let i = (y * canvas.width + x) * 4
+
+        let r = totalR / count
+        let g = totalG / count
+        let b = totalB / count
 
 for(let i = 0; i < data.length; i += 4){
 
